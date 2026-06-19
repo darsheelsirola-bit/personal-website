@@ -275,6 +275,9 @@
         width: min(100%, 420px);
         aspect-ratio: 4 / 5;
         margin: 0 auto;
+        perspective: 1200px;
+        transform-style: preserve-3d;
+        animation: portraitFloat 8s ease-in-out infinite;
       }
 
       .portrait-back,
@@ -282,17 +285,19 @@
         position: absolute;
         inset: 0;
         border-radius: 28px;
+        transform-style: preserve-3d;
+        will-change: transform;
       }
 
       .portrait-back {
         background: var(--lime);
-        transform: rotate(3deg);
+        transform: translateZ(-38px) rotate(3deg);
       }
 
       .portrait-mid {
         background: var(--coral);
         opacity: 0.82;
-        transform: translate(14px, 14px) rotate(-2deg);
+        transform: translate3d(14px, 14px, -18px) rotate(-2deg);
       }
 
       .portrait {
@@ -305,21 +310,37 @@
           radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.72), transparent 18%),
           linear-gradient(145deg, #24304b 0%, #171b28 55%, #11141d 100%);
         box-shadow: 12px 12px 0 var(--ink);
+        transform: translateZ(26px);
+        transform-style: preserve-3d;
+        transition:
+          transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform;
       }
 
-      .portrait-initials {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        color: rgba(248, 244, 233, 0.9);
-        font-family: "Space Grotesk", system-ui, sans-serif;
-        font-size: clamp(78px, 16vw, 150px);
-        font-weight: 700;
+      .portrait-wrap:hover .portrait {
+        transform: translateZ(44px) rotateX(2deg) rotateY(-3deg);
+        box-shadow: 16px 18px 0 var(--ink);
+      }
+
+      .portrait-wrap:hover .portrait-back {
+        transform: translateZ(-46px) rotate(5deg) translate(2px, -2px);
+      }
+
+      .portrait-wrap:hover .portrait-mid {
+        transform: translate3d(18px, 18px, -22px) rotate(-3deg);
+      }
+
+      .portrait-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 42%;
       }
 
       .profile-card {
         position: absolute;
+        z-index: 2;
         left: 16px;
         right: 16px;
         bottom: 16px;
@@ -331,6 +352,7 @@
         background: rgba(248, 244, 233, 0.92);
         padding: 14px 16px;
         backdrop-filter: blur(12px);
+        transform: translateZ(36px);
       }
 
       .profile-name {
@@ -646,6 +668,16 @@
         }
       }
 
+      @keyframes portraitFloat {
+        0%,
+        100% {
+          transform: rotateX(0deg) rotateY(0deg) translateY(0);
+        }
+        50% {
+          transform: rotateX(1.4deg) rotateY(-1.8deg) translateY(-8px);
+        }
+      }
+
       @media (min-width: 768px) {
         .container {
           padding-left: 48px;
@@ -699,6 +731,24 @@
 
         .education-card {
           flex-direction: column;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .portrait-wrap,
+        .marquee-track,
+        .live-dot {
+          animation: none;
+        }
+
+        .button,
+        .experience-card,
+        .portrait {
+          transition: none;
         }
       }
     </style>
@@ -773,6 +823,22 @@
                     <path d="M7 7h10v10"></path>
                   </svg>
                 </a>
+                <a
+                  class="button button-light"
+                  href="https://github.com/darsheelsirola-bit"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.1-1.3-.3-2.5-1-3.5.3-1.2.3-2.4 0-3.5 0 0-1 0-3 1.5-2.6-.5-5.4-.5-8 0C6 2 5 2 5 2c-.3 1.2-.3 2.4 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.4.5-.7 1.1-.9 1.7-.1.6-.2 1.2-.1 1.8v4"></path>
+                    <path d="M9 18c-4.5 2-5-2-7-2"></path>
+                  </svg>
+                  GitHub profile
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 17 17 7"></path>
+                    <path d="M7 7h10v10"></path>
+                  </svg>
+                </a>
               </div>
             </div>
 
@@ -780,7 +846,11 @@
               <div class="portrait-back"></div>
               <div class="portrait-mid"></div>
               <div class="portrait">
-                <div class="portrait-initials" aria-hidden="true">DS</div>
+                <img
+                  class="portrait-photo"
+                  src="profile-photo.svg"
+                  alt="Darsheel Sirola standing on a night terrace"
+                />
                 <div class="profile-card">
                   <div>
                     <div class="profile-name">Darsheel Sirola</div>
@@ -1012,6 +1082,18 @@
                   <circle cx="4" cy="4" r="2"></circle>
                 </svg>
                 Connect on LinkedIn
+              </a>
+              <a
+                class="button button-outline"
+                href="https://github.com/darsheelsirola-bit"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.1-1.3-.3-2.5-1-3.5.3-1.2.3-2.4 0-3.5 0 0-1 0-3 1.5-2.6-.5-5.4-.5-8 0C6 2 5 2 5 2c-.3 1.2-.3 2.4 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.4.5-.7 1.1-.9 1.7-.1.6-.2 1.2-.1 1.8v4"></path>
+                  <path d="M9 18c-4.5 2-5-2-7-2"></path>
+                </svg>
+                View GitHub
               </a>
             </div>
             <div class="footer-bottom">
